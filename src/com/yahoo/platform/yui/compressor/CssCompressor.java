@@ -117,7 +117,6 @@ public class CssCompressor {
         ArrayList preservedTokens = new ArrayList(0);
         ArrayList comments = new ArrayList(0);
         String token;
-        int totallen = css.length();
         String placeholder;
 
 
@@ -127,13 +126,14 @@ public class CssCompressor {
         while ((startIndex = sb.indexOf("/*", startIndex)) >= 0) {
             endIndex = sb.indexOf("*/", startIndex + 2);
             if (endIndex < 0) {
-                endIndex = totallen;
+                endIndex = sb.length();
             }
 
             token = sb.substring(startIndex + 2, endIndex);
             comments.add(token);
-            sb.replace(startIndex + 2, endIndex, "___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_" + (comments.size() - 1) + "___");
-            startIndex += 2;
+            placeholder = "___YUICSSMIN_PRESERVE_CANDIDATE_COMMENT_" + (comments.size() - 1) + "___";
+            sb.replace(startIndex + 2, endIndex, placeholder);
+            startIndex += placeholder.length() + 4;
         }
         css = sb.toString();
 
